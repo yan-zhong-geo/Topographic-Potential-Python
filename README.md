@@ -42,7 +42,7 @@ For each input point, the script:
 
 | Output | Type | Description |
 |--------|------|-------------|
-| TP_<OID>.tif | Raster | Slope-filtered topographic potential raster for each point |
+| TP_<OID>.tif | Raster | Topographic potential raster for each point |
 
 ---
 
