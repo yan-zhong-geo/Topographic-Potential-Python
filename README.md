@@ -29,7 +29,7 @@ For each input point, the script:
 |-----------|------|-------------|
 | DEM | Raster | Digital Elevation Model |
 | Flow Direction | Raster | D8 flow direction raster |
-| AOI | Raster | Region of interest mask |
+| AOI | Raster | Area of interest mask |
 | Points | Point Feature Class | Pour points for extraction |
 | tan_min | Float (optional) | Minimum slope threshold (default = 0.1) |
 | tan_max | Float (optional) | Maximum slope threshold (default = 1.5) |
