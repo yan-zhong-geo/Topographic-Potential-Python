@@ -34,7 +34,7 @@ For each input point, the script:
 | tan_min | Float (optional) | Minimum slope threshold (default = 0.1) |
 | tan_max | Float (optional) | Maximum slope threshold (default = 1.5) |
 | Output Folder | Folder | Directory to save TP rasters |
-| snap_dist | Float (optional) | Snap distance in meters (default = 500) |
+| Snap distance | Float (optional) | Snap distance in meters (default = 500) |
 
 ---
 
