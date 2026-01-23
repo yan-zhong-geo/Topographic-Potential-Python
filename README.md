@@ -17,9 +17,9 @@ For each input point, the script:
 1. Snaps the point to the nearest **flow accumulation maximum**.  
 2. Delineates the **watershed**.  
 3. Calculates **minimum elevation** in the watershed.  
-4. Computes **flow length** and **slope (tan α)**.  
-5. Filters flow paths by **AOI** and slope thresholds (`tan_min`, `tan_max`).  
-6. Saves a TP raster per point.
+4. Computes **flow length** and **tan α**.  
+5. Filters TP areas by **AOI** and slope thresholds (`tan_min`, `tan_max`).  
+6. Saves a TP raster **per point**.
 
 ---
 
@@ -31,8 +31,8 @@ For each input point, the script:
 | Flow Direction | Raster | D8 flow direction raster |
 | AOI | Raster | Area of interest mask |
 | Points | Point Feature Class | Pour points for extraction |
-| tan_min | Float (optional) | Minimum slope threshold (default = 0.1) |
-| tan_max | Float (optional) | Maximum slope threshold (default = 1.5) |
+| tan α min | Float (optional) | Minimum slope threshold (default = 0.1) |
+| tan α max | Float (optional) | Maximum slope threshold (default = 1.5) |
 | Output Folder | Folder | Directory to save TP rasters |
 | Snap distance | Float (optional) | Snap distance in meters (default = 500) |
 
@@ -49,9 +49,9 @@ For each input point, the script:
 ## Workflow
 
 1. Prepare DEM, flow direction, AOI, and points.  
-2. Set parameters (`tan_min`, `tan_max`, `snap_dist`, output folder).  
+2. Set parameters (`tan α min`, `tan α max`, `snap distance`, output folder).  
 3. Run the script:  
-   - Snap points → Delineate watershed → Compute min elevation → Calculate flow length → Filter by slope & ROI → Save TP raster.  
+   - Snap points → Delineate watershed → Compute min elevation → Calculate flow length → Filter by slope & AOI → Save TP raster.  
 4. Check output folder for `TP_<OID>.tif` rasters.  
 
 > Notes: Warnings appear if no pixels meet slope criteria for a point.
