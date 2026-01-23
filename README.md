@@ -18,7 +18,7 @@ For each input point, the script:
 2. Delineates the **watershed**.  
 3. Calculates **minimum elevation** in the watershed.  
 4. Computes **flow length** and **tan α**.  
-5. Filters TP areas by **AOI** and slope thresholds (`tan_min`, `tan_max`).  
+5. Filters TP areas by **AOI** and slope thresholds (`tan α min`, `tan α max`).  
 6. Saves a TP raster **per point**.
 
 ---
