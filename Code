@@ -1,0 +1,68 @@
+import arcpy
+from arcpy.sa import *
+import os
+arcpy.CheckOutExtension("Spatial")
+arcpy.env.overwriteOutput = True
+def get_double(i, default):
+    try:
+        val = arcpy.GetParameterAsText(i)
+        return float(val) if val not in [None, ""] else default
+    except:
+        return default
+dem_path = arcpy.GetParameterAsText(0)
+flow_dir_path = arcpy.GetParameterAsText(1)
+roi_input = arcpy.GetParameterAsText(2)
+points_input = arcpy.GetParameterAsText(3)
+tan_min = get_double(4, 0.1)
+tan_max = get_double(5, 1.5)
+out_folder = arcpy.GetParameterAsText(6)
+snap_dist = get_double(7, 500.0)
+dem = Raster(dem_path)
+flow_dir = Raster(flow_dir_path)
+roi = Raster(roi_input)
+arcpy.env.workspace = out_folder
+arcpy.env.snapRaster = flow_dir
+if not os.path.exists(out_folder):
+    os.makedirs(out_folder)
+arcpy.AddMessage("Step 1: Calculating Flow Accumulation...")
+facc = FlowAccumulation(flow_dir)
+points_z = "memory\\pts_temp"
+arcpy.management.CopyFeatures(points_input, points_z)
+dem_res = float(arcpy.GetRasterProperties_management(dem, "CELLSIZEX").getOutput(0))
+oid_field = arcpy.Describe(points_z).OIDFieldName
+with arcpy.da.SearchCursor(points_z, [oid_field, "SHAPE@"]) as cursor:
+    for oid, geom in cursor:
+        arcpy.AddMessage(f"=== Processing Point {oid} with Z_min logic ===")
+        
+        try:
+            
+            snapped_pp = SnapPourPoint(geom, facc, snap_dist)
+            ws = Watershed(flow_dir, snapped_pp)
+            ws_mask = Con(~IsNull(ws), 1)
+            
+            z_min_raster = ZonalStatistics(ws_mask, "Value", dem, "MINIMUM")
+            
+            fd_local = Con(ws_mask == 1, flow_dir)
+            fl = FlowLength(fd_local, "DOWNSTREAM")
+            
+            diff_h = dem - z_min_raster
+            tan_alpha = Con((ws_mask == 1) & (fl > (dem_res * 0.1)), diff_h / fl)
+            
+            final_TP = Con((~IsNull(roi)) & (tan_alpha >= tan_min) & (tan_alpha <= tan_max), tan_alpha)
+            
+            try:
+                arcpy.GetRasterProperties_management(final_TP, "MAXIMUM")
+                out_path = os.path.join(out_folder, f"TP_{oid}.tif")
+                final_TP.save(out_path)
+                arcpy.AddMessage(f"Success: Saved {out_path}")
+            except:
+                arcpy.AddWarning(f"Point {oid}: No pixels met the criteria [tan_min, tan_max].")
+            # ws_mask.save(os.path.join(out_folder, f"WS_{oid}.tif"))
+        except Exception as e:
+            arcpy.AddError(f"Point {oid} failed: {e}")
+            
+        finally:
+            arcpy.management.Delete("memory")
+            if not arcpy.Exists(points_z):
+                arcpy.management.CopyFeatures(points_input, points_z)
+arcpy.AddMessage("Process Completed.")
