@@ -56,3 +56,7 @@ For each input point, the script:
 
 > Notes: Warnings appear if no pixels meet slope criteria for a point.
 
+---
+
+## License
+See the [LICENSE](LICENSE) file for full terms.
