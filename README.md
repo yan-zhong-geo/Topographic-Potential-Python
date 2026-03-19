@@ -11,10 +11,10 @@
 
 ---
 ## Overview
-This Python script extracts **topographic potential (TP) areas** from a DEM using point locations and a **area of interest (AOI)**.  
+This Python script extracts **topographic potential (TP) areas** from a DEM using feature (point or polygon) locations and a **area of interest (AOI)**.  
 
-For each input point, the script:  
-1. Snaps the point to the nearest **flow accumulation maximum**.  
+For each input feature, the script:  
+1. Snaps the feature to the nearest **flow accumulation maximum**.  
 2. Delineates the **watershed**.  
 3. Calculates **minimum elevation** in the watershed.  
 4. Computes **flow length** and **tan α**.  
@@ -30,7 +30,7 @@ For each input point, the script:
 | DEM | Raster | Digital Elevation Model |
 | Flow Direction | Raster | D8 flow direction raster |
 | AOI | Raster | Area of interest mask |
-| Points | Point Feature Class | Pour points for extraction |
+| Features | Feature Layer | Pour points for extraction |
 | tan α min | Float (optional) | Minimum slope threshold (default = 0.1) |
 | tan α max | Float (optional) | Maximum slope threshold (default = 1.5) |
 | Output Folder | Folder | Directory to save TP rasters |
@@ -48,7 +48,7 @@ For each input point, the script:
 
 ## Workflow
 
-1. Prepare DEM, flow direction, AOI, and points.  
+1. Prepare DEM, flow direction, AOI, and features.  
 2. Set parameters (`tan α min`, `tan α max`, `snap distance`, output folder).  
 3. Run the script:  
    - Snap points → Delineate watershed → Compute min elevation → Calculate flow length → Filter by slope & AOI → Save TP raster.  
