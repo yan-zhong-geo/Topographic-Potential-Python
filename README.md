@@ -21,6 +21,11 @@ For each input feature, the script:
 5. Filters TP areas by **AOI** and slope thresholds (`tan α min`, `tan α max`).  
 6. Saves a TP raster **per point**.
 
+<figure>
+  <img width="450" height="450" alt="image" src="https://github.com/user-attachments/assets/7088ed6c-ace9-4e08-86e2-895ed44818d7" /><br>
+  <figcaption>Figure: Example of a simulated topographic potential (TP) map.</figcaption>
+</figure>
+
 ---
 
 ## Inputs
